@@ -9,6 +9,7 @@ var actions = ["ShootFast", "ShootSlow", "Movement", "Health", "Guard"]
 var steps = [1,1,2,1,1]
 var actionsAvailable = []
 var stepsAvailable = []
+var actionsConsume = [1,2,1,1,1]
  
 
 func _ready():
@@ -33,55 +34,30 @@ func _process(delta):
 		if Input.is_action_just_pressed("Action3"):
 			ActionChosen(2)
 		
-	if stepsAvailable[2] > 0:
-		if !isMoving:
-			if Input.is_action_just_pressed("ui_right"):
-				if self.position.x < -64:
-					MovePlayer(Vector2i.RIGHT)
-			elif Input.is_action_just_pressed("ui_left"):
-				if self.position.x > -448:
-					MovePlayer(Vector2i.LEFT)
-			elif Input.is_action_just_pressed("ui_down"):
-				if self.position.y < 256:
-					MovePlayer(Vector2i.DOWN)
-			elif Input.is_action_just_pressed("ui_up"):
-				if self.position.y > -256:
-					MovePlayer(Vector2i.UP)
-	
 	
 func ActionChosen(id):
-	actionsPerTurn -= 1
+	if actionsPerTurn > 0 && actionsPerTurn <actionsConsume[actionsAvailable[id]]:
+		return
+	
+	actionsPerTurn -= actionsConsume[actionsAvailable[id]]
 	print("    You chosed ", actions[actionsAvailable[id]])
 	print("=======================================")
 	stepsAvailable[actionsAvailable[id]] += steps[actionsAvailable[id]]
-	
 	InstantAction(actionsAvailable[id])
 	
+
+func OnActionFinished():
 	if actionsPerTurn > 0:
 		RandomizeActions()
 		
 func InstantAction(id):
-	if id == 0 && stepsAvailable[0] > 0:
-		print("Shoot fast Action")
-		print("=======================================")	
-		StartActionPerTurn(0)
-		
-	if id == 1 && stepsAvailable[1] > 0:
-		print("Shoot slow Action")
-		print("=======================================")	
-		StartActionPerTurn(1)
-
 	if id == 3 && stepsAvailable[3] > 0:
-		print("Health Action")
-		print("=======================================")	
 		StartActionPerTurn(3)
 		health += 25
 		if health > 100:
 			health = 100
 		
 	if id == 4 && stepsAvailable[4] > 0:
-		print("Guard Action")
-		print("=======================================")	
 		StartActionPerTurn(4)
 		
 	
@@ -105,11 +81,25 @@ func StartActionPerTurn(id):
 	print(actions[id], " ", stepsAvailable[id])
 	print("=======================================")
 	
+	if stepsAvailable[id] == 0:
+		OnActionFinished()	
+			
  
-func MovePlayer(direction):
+func MovePlayer(x, y):
+	isMoving = true
+	
 	StartActionPerTurn(2)
 	
-	isMoving = true
+	var direction = Vector2i.ZERO
+	
+	if(y > self.transform.origin.y && x == self.transform.origin.x):
+		direction = Vector2i.DOWN
+	elif (y < self.transform.origin.y && x == self.transform.origin.x):
+		direction = Vector2i.UP
+	elif (x > self.transform.origin.x && y == self.transform.origin.y):
+		direction = Vector2i.RIGHT
+	elif (x < self.transform.origin.x && y == self.transform.origin.y):
+		direction = Vector2i.LEFT
 	
 	$AnimationPlayer.play("walk" + GetDirectionSuffix(direction))
 	
