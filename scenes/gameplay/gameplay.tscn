@@ -1,10 +1,24 @@
-[gd_scene load_steps=18 format=3 uid="uid://4fyoq8npekf0"]
+[gd_scene load_steps=19 format=3 uid="uid://4fyoq8npekf0"]
 
 [ext_resource type="PackedScene" uid="uid://barl4q1kugrmm" path="res://scenes/gameplay/pause-layer/pause-layer.tscn" id="2"]
 [ext_resource type="Script" path="res://scenes/gameplay/CharacterBody2D.gd" id="4_ka8d4"]
 [ext_resource type="Texture2D" uid="uid://c4lp76ubmqyod" path="res://assets/sprites/sokoban_tilesheet.png" id="4_yab2s"]
 [ext_resource type="Script" path="res://scenes/gameplay/gameplay.gd" id="5"]
 [ext_resource type="Script" path="res://scenes/gameplay/Tile.gd" id="5_5bixp"]
+
+[sub_resource type="GDScript" id="GDScript_dq7no"]
+script/source = "extends Control
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	pass
+"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fnt0r"]
 size = Vector2(128, 128)
@@ -272,20 +286,105 @@ _data = {
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hbfks"]
 size = Vector2(100, 100)
 
-[node name="Gameplay" type="Node"]
+[node name="Gameplay" type="Node" node_paths=PackedStringArray("player")]
 script = ExtResource("5")
-
-[node name="PauseLayer" parent="." instance=ExtResource("2")]
+player = NodePath("Player")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(512, 320)
 scale = Vector2(17.84, 5.6)
 zoom = Vector2(0.8, 0.8)
 
-[node name="Player" type="CharacterBody2D" parent="."]
+[node name="PauseLayer" parent="." instance=ExtResource("2")]
+
+[node name="UIButtons" type="Control" parent="."]
+z_index = 100
+layout_mode = 3
+anchors_preset = 0
+offset_left = 64.0
+offset_top = 64.0
+offset_right = 104.0
+offset_bottom = 104.0
+script = SubResource("GDScript_dq7no")
+
+[node name="MarginContainer" type="MarginContainer" parent="UIButtons"]
+layout_mode = 0
+offset_left = -57.0
+offset_top = 605.0
+offset_right = 262.0
+offset_bottom = 645.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UIButtons/MarginContainer"]
+layout_mode = 2
+
+[node name="Action1" type="Button" parent="UIButtons/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "Action 1"
+
+[node name="Action2" type="Button" parent="UIButtons/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "Action 2
+"
+
+[node name="Action3" type="Button" parent="UIButtons/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "Action 3"
+
+[node name="FinishTurn" type="Button" parent="UIButtons/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "Finish Turn"
+
+[node name="APTLabel" type="Label" parent="UIButtons"]
+layout_mode = 0
+offset_left = -207.0
+offset_top = 159.0
+offset_right = -63.0
+offset_bottom = 211.0
+text = "Acciones por
+turno"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ActionsPerTurn" type="Label" parent="UIButtons"]
+layout_mode = 0
+offset_left = -212.0
+offset_top = 223.0
+offset_right = -68.0
+offset_bottom = 275.0
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MOVLabel" type="Label" parent="UIButtons"]
+layout_mode = 0
+offset_left = -213.0
+offset_top = 341.0
+offset_right = -69.0
+offset_bottom = 393.0
+text = "Movimientos
+disponibles"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MovementsPerAction" type="Label" parent="UIButtons"]
+layout_mode = 0
+offset_left = -218.0
+offset_top = 403.0
+offset_right = -74.0
+offset_bottom = 455.0
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Player" type="CharacterBody2D" parent="." node_paths=PackedStringArray("btnAction1", "btnAction2", "btnAction3", "actionsPerTurnText", "movementsPerActionText")]
 z_index = 10
 position = Vector2(192, 320)
 script = ExtResource("4_ka8d4")
+btnAction1 = NodePath("../UIButtons/MarginContainer/HBoxContainer/Action1")
+btnAction2 = NodePath("../UIButtons/MarginContainer/HBoxContainer/Action2")
+btnAction3 = NodePath("../UIButtons/MarginContainer/HBoxContainer/Action3")
+actionsPerTurnText = NodePath("../UIButtons/ActionsPerTurn")
+movementsPerActionText = NodePath("../UIButtons/MovementsPerAction")
 
 [node name="Sprite2D" type="Sprite2D" parent="Player"]
 texture = ExtResource("4_yab2s")
@@ -860,3 +959,8 @@ frame = 87
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile40"]
 shape = SubResource("RectangleShape2D_hbfks")
+
+[connection signal="pressed" from="UIButtons/MarginContainer/HBoxContainer/Action1" to="." method="_on_action_1_pressed"]
+[connection signal="pressed" from="UIButtons/MarginContainer/HBoxContainer/Action2" to="." method="_on_action_2_pressed"]
+[connection signal="pressed" from="UIButtons/MarginContainer/HBoxContainer/Action3" to="." method="_on_action_3_pressed"]
+[connection signal="pressed" from="UIButtons/MarginContainer/HBoxContainer/FinishTurn" to="." method="_on_finish_turn_pressed"]

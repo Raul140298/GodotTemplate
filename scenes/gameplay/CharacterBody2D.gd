@@ -10,39 +10,42 @@ var steps = [1,1,2,1,1]
 var actionsAvailable = []
 var stepsAvailable = []
 var actionsConsume = [1,2,1,1,1]
+
+@export var btnAction1: Control
+@export var btnAction2: Control
+@export var btnAction3: Control
+@export var actionsPerTurnText: Control
+@export var movementsPerActionText: Control
  
 
 func _ready():
 	$AnimationPlayer.play("idle_right")
 	StartTurn()
 
-
-func _process(delta):
-	if Input.is_action_just_pressed("FinishTurn"):
-		await get_tree().create_timer(2).timeout
-		print()
-		print("NEXT TURN==============================")
-		StartTurn()
+func FinishTurn():
+	StartTurn()
 	
+	
+func SelectAction(id):
 	if actionsPerTurn > 0:
-		if Input.is_action_just_pressed("Action1"):
-			ActionChosen(0)
-		
-		if Input.is_action_just_pressed("Action2"):
-			ActionChosen(1)
-			
-		if Input.is_action_just_pressed("Action3"):
-			ActionChosen(2)
+		ActionChosen(id)
 		
 	
 func ActionChosen(id):
 	if actionsPerTurn > 0 && actionsPerTurn <actionsConsume[actionsAvailable[id]]:
 		return
 	
+	btnAction1.hide()
+	btnAction2.hide()
+	btnAction3.hide()
+	
 	actionsPerTurn -= actionsConsume[actionsAvailable[id]]
-	print("    You chosed ", actions[actionsAvailable[id]])
-	print("=======================================")
+	actionsPerTurnText.text = str(actionsPerTurn)
 	stepsAvailable[actionsAvailable[id]] += steps[actionsAvailable[id]]
+	
+	if actionsAvailable[id] == 2:
+		movementsPerActionText.text = str(stepsAvailable[2])
+	
 	InstantAction(actionsAvailable[id])
 	
 
@@ -65,21 +68,26 @@ func RandomizeActions():
 	var aux = actionsList
 	aux.shuffle()
 	actionsAvailable = aux.slice(0,3) #Arreglo de 3 ids desordenados
-	print(actions[actionsAvailable[0]], " ", actions[actionsAvailable[1]], " ", actions[actionsAvailable[2]])
-	print("=======================================")
+	btnAction1.text = actions[actionsAvailable[0]] + " (" + str(actionsConsume[actionsAvailable[0]]) + ")"
+	btnAction2.text = actions[actionsAvailable[1]] + " (" + str(actionsConsume[actionsAvailable[1]]) + ")"
+	btnAction3.text = actions[actionsAvailable[2]] + " (" + str(actionsConsume[actionsAvailable[2]]) + ")"
 
+	btnAction1.show()
+	btnAction2.show()
+	btnAction3.show()
 
 func StartTurn():
 	actionsPerTurn = 2
+	actionsPerTurnText.text = str(actionsPerTurn)
 	stepsAvailable = [0,0,0,0,0]
 	RandomizeActions()
 	
 func StartActionPerTurn(id):
 	if stepsAvailable[id] > 0:
 		stepsAvailable[id] -= 1
-	
-	print(actions[id], " ", stepsAvailable[id])
-	print("=======================================")
+		
+	if id == 2:
+		movementsPerActionText.text = str(stepsAvailable[2])
 	
 	if stepsAvailable[id] == 0:
 		OnActionFinished()	
