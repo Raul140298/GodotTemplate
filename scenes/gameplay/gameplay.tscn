@@ -1,23 +1,14 @@
-[gd_scene load_steps=19 format=3 uid="uid://4fyoq8npekf0"]
+[gd_scene load_steps=20 format=3 uid="uid://4fyoq8npekf0"]
 
 [ext_resource type="PackedScene" uid="uid://barl4q1kugrmm" path="res://scenes/gameplay/pause-layer/pause-layer.tscn" id="2"]
-[ext_resource type="Script" path="res://scenes/gameplay/CharacterBody2D.gd" id="4_ka8d4"]
+[ext_resource type="PackedScene" uid="uid://bwnhkcbxhyaew" path="res://scenes/gameplay/enemy.tscn" id="2_hw8fl"]
+[ext_resource type="Script" path="res://scenes/gameplay/PlayerModel.gd" id="4_vkwhx"]
 [ext_resource type="Texture2D" uid="uid://c4lp76ubmqyod" path="res://assets/sprites/sokoban_tilesheet.png" id="4_yab2s"]
 [ext_resource type="Script" path="res://scenes/gameplay/gameplay.gd" id="5"]
 [ext_resource type="Script" path="res://scenes/gameplay/Tile.gd" id="5_5bixp"]
 
 [sub_resource type="GDScript" id="GDScript_dq7no"]
 script/source = "extends Control
-
-
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
 "
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fnt0r"]
@@ -286,9 +277,18 @@ _data = {
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hbfks"]
 size = Vector2(100, 100)
 
-[node name="Gameplay" type="Node" node_paths=PackedStringArray("player")]
+[node name="Gameplay" type="Node" node_paths=PackedStringArray("player", "btnAction1", "btnAction2", "btnAction3", "playerHp", "actionsPerTurnText", "movementsPerActionText", "turnText")]
 script = ExtResource("5")
 player = NodePath("Player")
+enemyPrefab = ExtResource("2_hw8fl")
+btnAction1 = NodePath("UIButtons/MarginContainer/HBoxContainer/Action1")
+btnAction2 = NodePath("UIButtons/MarginContainer/HBoxContainer/Action2")
+btnAction3 = NodePath("UIButtons/MarginContainer/HBoxContainer/Action3")
+playerHp = NodePath("UIButtons/Hp")
+actionsPerTurnText = NodePath("UIButtons/ActionsPerTurn")
+movementsPerActionText = NodePath("UIButtons/MovementsPerAction")
+turnText = NodePath("UIButtons/Turn")
+tiles = [[NodePath("Tile1"), NodePath("Tile9"), NodePath("Tile17"), NodePath("Tile25"), NodePath("Tile33")], [NodePath("Tile2"), NodePath("Tile10"), NodePath("Tile18"), NodePath("Tile26"), NodePath("Tile34")], [NodePath("Tile3"), NodePath("Tile11"), NodePath("Tile19"), NodePath("Tile27"), NodePath("Tile35")], [NodePath("Tile4"), NodePath("Tile12"), NodePath("Tile20"), NodePath("Tile28"), NodePath("Tile36")], [NodePath("Tile5"), NodePath("Tile13"), NodePath("Tile21"), NodePath("Tile29"), NodePath("Tile37")], [NodePath("Tile6"), NodePath("Tile14"), NodePath("Tile22"), NodePath("Tile30"), NodePath("Tile38")], [NodePath("Tile7"), NodePath("Tile15"), NodePath("Tile23"), NodePath("Tile31"), NodePath("Tile39")], [NodePath("Tile8"), NodePath("Tile16"), NodePath("Tile24"), NodePath("Tile32"), NodePath("Tile40")]]
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(512, 320)
@@ -334,6 +334,26 @@ text = "Action 3"
 layout_mode = 2
 text = "Finish Turn"
 
+[node name="HPLabel" type="Label" parent="UIButtons"]
+layout_mode = 0
+offset_left = -224.0
+offset_top = -36.0
+offset_right = -80.0
+offset_bottom = 16.0
+text = "Vida"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Hp" type="Label" parent="UIButtons"]
+layout_mode = 0
+offset_left = -216.0
+offset_top = 25.0
+offset_right = -72.0
+offset_bottom = 77.0
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="APTLabel" type="Label" parent="UIButtons"]
 layout_mode = 0
 offset_left = -207.0
@@ -376,15 +396,30 @@ text = "0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Player" type="CharacterBody2D" parent="." node_paths=PackedStringArray("btnAction1", "btnAction2", "btnAction3", "actionsPerTurnText", "movementsPerActionText")]
+[node name="TurnLabel" type="Label" parent="UIButtons"]
+layout_mode = 0
+offset_left = 993.0
+offset_top = -14.0
+offset_right = 1137.0
+offset_bottom = 38.0
+text = "Turno"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Turn" type="Label" parent="UIButtons"]
+layout_mode = 0
+offset_left = 988.0
+offset_top = 48.0
+offset_right = 1132.0
+offset_bottom = 100.0
+text = "Turno"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Player" type="CharacterBody2D" parent="."]
 z_index = 10
 position = Vector2(192, 320)
-script = ExtResource("4_ka8d4")
-btnAction1 = NodePath("../UIButtons/MarginContainer/HBoxContainer/Action1")
-btnAction2 = NodePath("../UIButtons/MarginContainer/HBoxContainer/Action2")
-btnAction3 = NodePath("../UIButtons/MarginContainer/HBoxContainer/Action3")
-actionsPerTurnText = NodePath("../UIButtons/ActionsPerTurn")
-movementsPerActionText = NodePath("../UIButtons/MovementsPerAction")
+script = ExtResource("4_vkwhx")
 
 [node name="Sprite2D" type="Sprite2D" parent="Player"]
 texture = ExtResource("4_yab2s")
@@ -400,10 +435,11 @@ libraries = {
 "": SubResource("AnimationLibrary_pwwm6")
 }
 
-[node name="Tile1" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile1" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(64, 64)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile1"]
 texture = ExtResource("4_yab2s")
@@ -414,10 +450,11 @@ frame = 86
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile1"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile2" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile2" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(192, 64)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile2"]
 texture = ExtResource("4_yab2s")
@@ -428,10 +465,11 @@ frame = 86
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile2"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile3" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile3" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(320, 64)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile3"]
 texture = ExtResource("4_yab2s")
@@ -442,10 +480,11 @@ frame = 86
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile3"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile4" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile4" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(448, 64)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile4"]
 texture = ExtResource("4_yab2s")
@@ -456,10 +495,11 @@ frame = 86
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile4"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile5" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile5" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(576, 64)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile5"]
 texture = ExtResource("4_yab2s")
@@ -470,10 +510,11 @@ frame = 87
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile5"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile6" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile6" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(704, 64)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile6"]
 texture = ExtResource("4_yab2s")
@@ -484,10 +525,11 @@ frame = 87
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile6"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile7" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile7" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(832, 64)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile7"]
 texture = ExtResource("4_yab2s")
@@ -498,10 +540,11 @@ frame = 87
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile7"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile8" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile8" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(960, 64)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile8"]
 texture = ExtResource("4_yab2s")
@@ -512,10 +555,11 @@ frame = 87
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile8"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile9" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile9" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(64, 192)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile9"]
 texture = ExtResource("4_yab2s")
@@ -526,10 +570,11 @@ frame = 86
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile9"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile10" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile10" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(192, 192)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile10"]
 texture = ExtResource("4_yab2s")
@@ -540,10 +585,11 @@ frame = 86
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile10"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile11" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile11" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(320, 192)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile11"]
 texture = ExtResource("4_yab2s")
@@ -554,10 +600,11 @@ frame = 86
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile11"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile12" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile12" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(448, 192)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile12"]
 texture = ExtResource("4_yab2s")
@@ -568,10 +615,11 @@ frame = 86
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile12"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile13" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile13" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(576, 192)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile13"]
 texture = ExtResource("4_yab2s")
@@ -582,10 +630,11 @@ frame = 87
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile13"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile14" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile14" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(704, 192)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile14"]
 texture = ExtResource("4_yab2s")
@@ -596,10 +645,11 @@ frame = 87
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile14"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile15" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile15" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(832, 192)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile15"]
 texture = ExtResource("4_yab2s")
@@ -610,10 +660,11 @@ frame = 87
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile15"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile16" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile16" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(960, 192)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile16"]
 texture = ExtResource("4_yab2s")
@@ -624,10 +675,11 @@ frame = 87
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile16"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile17" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile17" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(64, 320)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile17"]
 texture = ExtResource("4_yab2s")
@@ -638,10 +690,11 @@ frame = 86
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile17"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile18" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile18" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(192, 320)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile18"]
 texture = ExtResource("4_yab2s")
@@ -652,10 +705,11 @@ frame = 86
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile18"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile19" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile19" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(320, 320)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile19"]
 texture = ExtResource("4_yab2s")
@@ -666,10 +720,11 @@ frame = 86
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile19"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile20" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile20" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(448, 320)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile20"]
 texture = ExtResource("4_yab2s")
@@ -680,10 +735,11 @@ frame = 86
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile20"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile21" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile21" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(576, 320)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile21"]
 texture = ExtResource("4_yab2s")
@@ -694,10 +750,11 @@ frame = 87
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile21"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile22" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile22" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(704, 320)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile22"]
 texture = ExtResource("4_yab2s")
@@ -708,10 +765,11 @@ frame = 87
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile22"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile23" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile23" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(832, 320)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile23"]
 texture = ExtResource("4_yab2s")
@@ -722,10 +780,11 @@ frame = 87
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile23"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile24" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile24" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(960, 320)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile24"]
 texture = ExtResource("4_yab2s")
@@ -736,10 +795,11 @@ frame = 87
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile24"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile25" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile25" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(64, 448)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile25"]
 texture = ExtResource("4_yab2s")
@@ -750,10 +810,11 @@ frame = 86
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile25"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile26" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile26" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(192, 448)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile26"]
 texture = ExtResource("4_yab2s")
@@ -764,10 +825,11 @@ frame = 86
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile26"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile27" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile27" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(320, 448)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile27"]
 texture = ExtResource("4_yab2s")
@@ -778,10 +840,11 @@ frame = 86
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile27"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile28" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile28" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(448, 448)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile28"]
 texture = ExtResource("4_yab2s")
@@ -792,10 +855,11 @@ frame = 86
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile28"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile29" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile29" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(576, 448)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile29"]
 texture = ExtResource("4_yab2s")
@@ -806,10 +870,11 @@ frame = 87
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile29"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile30" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile30" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(704, 448)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile30"]
 texture = ExtResource("4_yab2s")
@@ -820,10 +885,11 @@ frame = 87
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile30"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile31" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile31" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(832, 448)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile31"]
 texture = ExtResource("4_yab2s")
@@ -834,10 +900,11 @@ frame = 87
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile31"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile32" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile32" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(960, 448)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile32"]
 texture = ExtResource("4_yab2s")
@@ -848,10 +915,11 @@ frame = 87
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile32"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile33" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile33" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(64, 576)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile33"]
 texture = ExtResource("4_yab2s")
@@ -862,10 +930,11 @@ frame = 86
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile33"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile34" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile34" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(192, 576)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile34"]
 texture = ExtResource("4_yab2s")
@@ -876,10 +945,11 @@ frame = 86
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile34"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile35" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile35" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(320, 576)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile35"]
 texture = ExtResource("4_yab2s")
@@ -890,10 +960,11 @@ frame = 86
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile35"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile36" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile36" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(448, 576)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile36"]
 texture = ExtResource("4_yab2s")
@@ -904,10 +975,11 @@ frame = 86
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile36"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile37" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile37" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(576, 576)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile37"]
 texture = ExtResource("4_yab2s")
@@ -918,10 +990,11 @@ frame = 87
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile37"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile38" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile38" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(704, 576)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile38"]
 texture = ExtResource("4_yab2s")
@@ -932,10 +1005,11 @@ frame = 87
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile38"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile39" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile39" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(832, 576)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile39"]
 texture = ExtResource("4_yab2s")
@@ -946,10 +1020,11 @@ frame = 87
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile39"]
 shape = SubResource("RectangleShape2D_hbfks")
 
-[node name="Tile40" type="Area2D" parent="." node_paths=PackedStringArray("player")]
+[node name="Tile40" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(960, 576)
 script = ExtResource("5_5bixp")
 player = NodePath("../Player")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Tile40"]
 texture = ExtResource("4_yab2s")

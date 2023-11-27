@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="EnemyResource" load_steps=2 format=3 uid="uid://b5jr8senf50k"]
+
+[ext_resource type="Script" path="res://scenes/gameplay/Enemy.gd" id="1_40n2u"]
+
+[resource]
+script = ExtResource("1_40n2u")
+passive = ""
+health = 50.0
+actions = ["Movement", "ShootFast"]
