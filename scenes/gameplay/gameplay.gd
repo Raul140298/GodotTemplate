@@ -1,7 +1,6 @@
 extends Node
 
 @export var player: Node2D
-@export var enemyPrefab: PackedScene
 @export var btnAction1: Control
 @export var btnAction2: Control
 @export var btnAction3: Control
@@ -9,8 +8,9 @@ extends Node
 @export var actionsPerTurnText: Control
 @export var movementsPerActionText: Control
 @export var turnText: Control 
-
 @export var tiles: Array = []
+
+signal turnChanged
 
 var turn = 0
 var actionsPerTurn = 2
@@ -46,10 +46,20 @@ func SetPlayerPosition():
 
 func SetEnemies():
 	for i in range(3):
-		var scene = load("res://scenes/gameplay/enemy.tscn")
+		var scene = preload("res://scenes/gameplay/enemy.tscn")
+		var initialValues
+		
+		if i == 0:
+			initialValues = preload("res://scenes/gameplay/RES_Enemy1.tres")
+		elif i == 1:
+			initialValues = preload("res://scenes/gameplay/RES_Enemy2.tres")
+		elif i == 2:
+			initialValues = preload("res://scenes/gameplay/RES_Enemy3.tres")
+		
 		var enemy_instance = scene.instantiate()
 		enemy_instance.set_name("Enemy " + str(i))
 		add_child(enemy_instance)
+		enemy_instance.SetIntialValues(initialValues.health, initialValues.passive, initialValues.actions)
 		SetEnemyPosition(enemy_instance)
 		enemy_instance.get_node("AnimationPlayer").play("idle_left")
 
@@ -124,6 +134,7 @@ func RandomizeActions():
 	btnAction2.show()
 	btnAction3.show()
 
+
 func StartTurn():
 	actionsPerTurn = 2
 	actionsPerTurnText.text = str(actionsPerTurn)
@@ -131,6 +142,7 @@ func StartTurn():
 	RandomizeActions()
 	turn += 1
 	turnText.text = str(turn)
+	turnChanged.emit()
 	
 func StartActionPerTurn(id):
 	if stepsAvailable[id] > 0:

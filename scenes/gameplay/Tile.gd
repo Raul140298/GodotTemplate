@@ -15,9 +15,14 @@ func _ready():
 	
 
 func DamageTile(damage, initialTurn, turnsToDamage):
-	if gameController.turn == (initialTurn + turnsToDamage):
+	gameController.turnChanged.connect(Callable(OnDamageTileSignal).bind(damage, initialTurn + turnsToDamage))
+
+
+func OnDamageTileSignal(damage, finalTurn):
+	if gameController.turn == finalTurn:
 		if guest != null:
 			guest.TakeDamage(damage)
+		gameController.turnChanged.disconnect(OnDamageTileSignal)
 
 
 func HoverTile():

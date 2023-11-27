@@ -1,7 +1,6 @@
-[gd_scene load_steps=20 format=3 uid="uid://4fyoq8npekf0"]
+[gd_scene load_steps=19 format=3 uid="uid://4fyoq8npekf0"]
 
 [ext_resource type="PackedScene" uid="uid://barl4q1kugrmm" path="res://scenes/gameplay/pause-layer/pause-layer.tscn" id="2"]
-[ext_resource type="PackedScene" uid="uid://bwnhkcbxhyaew" path="res://scenes/gameplay/enemy.tscn" id="2_hw8fl"]
 [ext_resource type="Script" path="res://scenes/gameplay/PlayerModel.gd" id="4_vkwhx"]
 [ext_resource type="Texture2D" uid="uid://c4lp76ubmqyod" path="res://assets/sprites/sokoban_tilesheet.png" id="4_yab2s"]
 [ext_resource type="Script" path="res://scenes/gameplay/gameplay.gd" id="5"]
@@ -280,7 +279,6 @@ size = Vector2(100, 100)
 [node name="Gameplay" type="Node" node_paths=PackedStringArray("player", "btnAction1", "btnAction2", "btnAction3", "playerHp", "actionsPerTurnText", "movementsPerActionText", "turnText")]
 script = ExtResource("5")
 player = NodePath("Player")
-enemyPrefab = ExtResource("2_hw8fl")
 btnAction1 = NodePath("UIButtons/MarginContainer/HBoxContainer/Action1")
 btnAction2 = NodePath("UIButtons/MarginContainer/HBoxContainer/Action2")
 btnAction3 = NodePath("UIButtons/MarginContainer/HBoxContainer/Action3")
