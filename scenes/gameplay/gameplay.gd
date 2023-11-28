@@ -23,17 +23,21 @@ var actionsConsume = [1,2,1,1,1]
 var actionsAvailable = []
 var stepsAvailable = []
 
+var possibleNewTurn = 0
+
+
 func _ready():
 	SetPlayer()
 	SetEnemies()
-	StartTurn()
-	
-	
+	StartPlayerTurn()
+
+
 func SetPlayer():
 	SetPlayerPosition()
 	player.get_node("AnimationPlayer").play("idle_right")
 	playerHp.text = str(player.health)	
-	
+
+
 func SetPlayerPosition():
 	var x = randi() % 4
 	var y = randi() % 5
@@ -42,7 +46,7 @@ func SetPlayerPosition():
 	player.transform.origin.y = y * 128 + 64
 
 	get_node(tiles[x][y]).guest = player
-	
+
 
 func SetEnemies():
 	for i in range(3):
@@ -63,6 +67,7 @@ func SetEnemies():
 		SetEnemyPosition(enemy_instance)
 		enemy_instance.get_node("AnimationPlayer").play("idle_left")
 
+
 func SetEnemyPosition(enemy):
 	var x = -1
 	var y = -1
@@ -77,17 +82,21 @@ func SetEnemyPosition(enemy):
 	enemy.transform.origin.y = y * 128 + 64
 
 	get_node(tiles[x][y]).guest = enemy
-	
+
 
 func FinishTurn():
-	StartTurn()
-	
-	
+	if turn == possibleNewTurn:
+		StartPlayerTurn()
+	else:
+		NextTurn()
+
+
 func SelectAction(id):
 	if actionsPerTurn > 0:
 		ActionChosen(id)
-		
-	
+
+
+
 func ActionChosen(id):
 	if actionsPerTurn > 0 && actionsPerTurn <actionsConsume[actionsAvailable[id]]:
 		return
@@ -104,12 +113,13 @@ func ActionChosen(id):
 		movementsPerActionText.text = str(stepsAvailable[2])
 	
 	InstantAction(actionsAvailable[id])
-	
+
 
 func OnActionFinished():
 	if actionsPerTurn > 0:
 		RandomizeActions()
-		
+
+
 func InstantAction(id):
 	if id == 3 && stepsAvailable[3] > 0:
 		StartActionPerTurn(3)
@@ -120,8 +130,16 @@ func InstantAction(id):
 		
 	if id == 4 && stepsAvailable[4] > 0:
 		StartActionPerTurn(4)
-		
-	
+		player.guard += 50
+		turnChanged.connect(Callable(OnPlayerGuardSignal.bind(turn+2)))
+
+
+func OnPlayerGuardSignal(lastTurn):
+		if turn == lastTurn:
+			player.guard = 0
+			turnChanged.disconnect(OnPlayerGuardSignal)
+
+
 func RandomizeActions():
 	var aux = actionsList
 	aux.shuffle()
@@ -135,15 +153,20 @@ func RandomizeActions():
 	btnAction3.show()
 
 
-func StartTurn():
+func StartPlayerTurn():
 	actionsPerTurn = 2
 	actionsPerTurnText.text = str(actionsPerTurn)
 	stepsAvailable = [0,0,0,0,0]
 	RandomizeActions()
+	possibleNewTurn = turn + 2
+	NextTurn()
+
+
+func NextTurn():
 	turn += 1
 	turnText.text = str(turn)
 	turnChanged.emit()
-	
+
 func StartActionPerTurn(id):
 	if stepsAvailable[id] > 0:
 		stepsAvailable[id] -= 1
@@ -153,7 +176,7 @@ func StartActionPerTurn(id):
 	
 	if stepsAvailable[id] == 0:
 		OnActionFinished()	
-			
+
  
 func MovePlayer(x, y):
 	player.isMoving = true
@@ -183,9 +206,18 @@ func MovePlayer(x, y):
 	await tween.finished
 	
 	player.get_node("AnimationPlayer").play("idle" + GetDirectionSuffix(direction))
-	get_node(tiles[(player.transform.origin.x-64)/128][(player.transform.origin.y-64)/128]).guest = player
+
+	var tile = get_node(tiles[(player.transform.origin.x-64)/128][(player.transform.origin.y-64)/128])
+	tile.guest = player
+	
+	var mousePos = tile.GetMousePosition()
+	
+	tile = get_node(tiles[mousePos.x/128][mousePos.y/128])
+	tile.HoverTile()
+	
 	player.isMoving = false
  
+
 func GetDirectionSuffix(direction):
 	if direction == Vector2i.RIGHT:
 		return "_right"

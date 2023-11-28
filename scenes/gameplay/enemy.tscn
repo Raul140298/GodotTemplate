@@ -266,9 +266,10 @@ _data = {
 "walk_up": SubResource("Animation_opljg")
 }
 
-[node name="Enemy" type="CharacterBody2D"]
+[node name="Enemy" type="CharacterBody2D" node_paths=PackedStringArray("healthText")]
 z_index = 10
 script = ExtResource("1_k3r8f")
+healthText = NodePath("Label")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_tvymm")
@@ -283,3 +284,12 @@ shape = SubResource("RectangleShape2D_fnt0r")
 libraries = {
 "": SubResource("AnimationLibrary_pwwm6")
 }
+
+[node name="Label" type="Label" parent="."]
+offset_left = -20.0
+offset_top = 67.0
+offset_right = 20.0
+offset_bottom = 93.0
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
