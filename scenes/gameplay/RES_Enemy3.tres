@@ -4,6 +4,6 @@
 
 [resource]
 script = ExtResource("1_c8t4d")
+id = 2
 passive = "Shield"
 health = 70.0
-actions = ["", "", null]

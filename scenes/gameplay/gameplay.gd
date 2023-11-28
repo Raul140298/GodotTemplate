@@ -4,6 +4,7 @@ extends Node
 @export var btnAction1: Control
 @export var btnAction2: Control
 @export var btnAction3: Control
+@export var btnFinishTurn: Control
 @export var playerHp: Control 
 @export var actionsPerTurnText: Control
 @export var movementsPerActionText: Control
@@ -13,7 +14,7 @@ extends Node
 signal turnChanged
 
 var turn = 0
-var actionsPerTurn = 2
+var actionsPerTurn = 0
 
 var actionsList =[0,1,2,3,4]
 var actions = ["ShootFast", "ShootSlow", "Movement", "Health", "Guard"]
@@ -25,6 +26,9 @@ var stepsAvailable = []
 
 var possibleNewTurn = 0
 
+var enemies = []
+var tweensInProcess = []
+
 
 func _ready():
 	SetPlayer()
@@ -34,8 +38,8 @@ func _ready():
 
 func SetPlayer():
 	SetPlayerPosition()
-	player.get_node("AnimationPlayer").play("idle_right")
 	playerHp.text = str(player.health)	
+	player.get_node("AnimationPlayer").play("idle_right")
 
 
 func SetPlayerPosition():
@@ -63,9 +67,11 @@ func SetEnemies():
 		var enemy_instance = scene.instantiate()
 		enemy_instance.set_name("Enemy " + str(i))
 		add_child(enemy_instance)
-		enemy_instance.SetIntialValues(initialValues.health, initialValues.passive, initialValues.actions)
+		enemy_instance.SetIntialValues(initialValues.health, initialValues.passive, initialValues.id)
 		SetEnemyPosition(enemy_instance)
 		enemy_instance.get_node("AnimationPlayer").play("idle_left")
+		
+		enemies.append(enemy_instance)
 
 
 func SetEnemyPosition(enemy):
@@ -88,13 +94,12 @@ func FinishTurn():
 	if turn == possibleNewTurn:
 		StartPlayerTurn()
 	else:
-		NextTurn()
+		StartEnemiesTurn()
 
 
 func SelectAction(id):
 	if actionsPerTurn > 0:
 		ActionChosen(id)
-
 
 
 func ActionChosen(id):
@@ -143,7 +148,7 @@ func OnPlayerGuardSignal(lastTurn):
 func RandomizeActions():
 	var aux = actionsList
 	aux.shuffle()
-	actionsAvailable = aux.slice(0,3) #Arreglo de 3 ids desordenados
+	actionsAvailable = aux.slice(0,3)
 	btnAction1.text = actions[actionsAvailable[0]] + " (" + str(actionsConsume[actionsAvailable[0]]) + ")"
 	btnAction2.text = actions[actionsAvailable[1]] + " (" + str(actionsConsume[actionsAvailable[1]]) + ")"
 	btnAction3.text = actions[actionsAvailable[2]] + " (" + str(actionsConsume[actionsAvailable[2]]) + ")"
@@ -151,6 +156,7 @@ func RandomizeActions():
 	btnAction1.show()
 	btnAction2.show()
 	btnAction3.show()
+	btnFinishTurn.show()
 
 
 func StartPlayerTurn():
@@ -159,13 +165,107 @@ func StartPlayerTurn():
 	stepsAvailable = [0,0,0,0,0]
 	RandomizeActions()
 	possibleNewTurn = turn + 2
+	
 	NextTurn()
+
+
+func StartEnemiesTurn():
+	btnAction1.hide()
+	btnAction2.hide()
+	btnAction3.hide()
+	btnFinishTurn.hide()
+	
+	actionsPerTurn = 0
+	actionsPerTurnText.text = str(actionsPerTurn)
+	stepsAvailable = [0,0,0,0,0]
+	movementsPerActionText.text = str(0)
+	
+	NextTurn()
+	
+	enemies.shuffle()
+	
+	for enemy in enemies:
+		ChooseEnemyAction(enemy)
+		
+	for tween in tweensInProcess:
+		await tween.finished
+		
+	FinishTurn()
+
+
+func ChooseEnemyAction(enemy):
+	var r = randi() % 2
+	
+	if r == 0:
+		MoveEnemy(enemy)
+	else:
+		EnemyShootPlayer(enemy)
+
+
+func EnemyShootPlayer(enemy):
+	var x = (player.transform.origin.x-64)/128
+	var y = (player.transform.origin.y-64)/128
+	
+	var tileToShoot = get_node(tiles[x][y])
+	
+	if tileToShoot.guest == player:
+		tileToShoot.DamageTile(10, turn, 2)
+
+
+func MoveEnemy(enemy):
+	var x = (enemy.transform.origin.x-64)/128
+	var y = (enemy.transform.origin.y-64)/128
+	
+	var tilesAvailables = []
+	
+	var iX
+	var iY
+	
+	#UP
+	iX = x
+	iY = y + 1
+	
+	if iY < 5 && get_node(tiles[iX][iY]).guest == null:
+		tilesAvailables.append(get_node(tiles[iX][iY]))
+		
+	#DOWN
+	iX = x
+	iY = y - 1
+	
+	if iY >= 0 && get_node(tiles[iX][iY]).guest == null:
+		tilesAvailables.append(get_node(tiles[iX][iY]))
+		
+	#RIGHT
+	iX = x + 1
+	iY = y
+	
+	if iX < 8 && get_node(tiles[iX][iY]).guest == null:
+		tilesAvailables.append(get_node(tiles[iX][iY]))
+		
+	#LEFT
+	iX = x - 1
+	iY = y
+	
+	if iX >= 4 && get_node(tiles[iX][iY]).guest == null:
+		tilesAvailables.append(get_node(tiles[iX][iY]))
+	
+	if tilesAvailables.is_empty():
+		return
+	else:
+		var tileOrigin = get_node(tiles[x][y])
+		if tileOrigin.guest == enemy:
+			tileOrigin.guest = null
+		
+		var tileTarget = tilesAvailables[randi() % tilesAvailables.size()]
+		tileTarget.guest = enemy
+		MoveUnit(tileTarget.transform.origin.x, tileTarget.transform.origin.y, enemy)
 
 
 func NextTurn():
 	turn += 1
 	turnText.text = str(turn)
 	turnChanged.emit()
+
 
 func StartActionPerTurn(id):
 	if stepsAvailable[id] > 0:
@@ -177,45 +277,56 @@ func StartActionPerTurn(id):
 	if stepsAvailable[id] == 0:
 		OnActionFinished()	
 
+
+func MovePlayer(tileTarget):
+	var x = (player.transform.origin.x-64)/128
+	var y = (player.transform.origin.y-64)/128
+	
+	var tileOrigin = get_node(tiles[x][y])
+	if tileOrigin.guest == player:
+		tileOrigin.guest = null
+	
+	tileTarget.guest = player
+	MoveUnit(tileTarget.transform.origin.x, tileTarget.transform.origin.y, player)
+
  
-func MovePlayer(x, y):
-	player.isMoving = true
-	
+func MoveUnit(x, y, unit):
 	StartActionPerTurn(2)
-	
-	get_node(tiles[(player.transform.origin.x-64)/128][(player.transform.origin.y-64)/128]).guest = null
 	
 	var direction = Vector2i.ZERO
 	
-	if(y > player.transform.origin.y && x == player.transform.origin.x):
+	if(y > unit.transform.origin.y && x == unit.transform.origin.x):
 		direction = Vector2i.DOWN
-	elif (y < player.transform.origin.y && x == player.transform.origin.x):
+	elif (y < unit.transform.origin.y && x == unit.transform.origin.x):
 		direction = Vector2i.UP
-	elif (x > player.transform.origin.x && y == player.transform.origin.y):
+	elif (x > unit.transform.origin.x && y == unit.transform.origin.y):
 		direction = Vector2i.RIGHT
-	elif (x < player.transform.origin.x && y == player.transform.origin.y):
+	elif (x < unit.transform.origin.x && y == unit.transform.origin.y):
 		direction = Vector2i.LEFT
 	
-	player.get_node("AnimationPlayer").play("walk" + GetDirectionSuffix(direction))
+	unit.get_node("AnimationPlayer").play("walk" + GetDirectionSuffix(direction))
 	
-	var targetPosition = player.position + direction * 128.0
+	var targetPosition = unit.position + direction * 128.0
 	var tween = create_tween()
 	
-	tween.tween_property(player, "position", targetPosition, 0.5)
+	tween.tween_property(unit, "position", targetPosition, 0.5)
+	
+	tweensInProcess.append(tween)
 	
 	await tween.finished
 	
-	player.get_node("AnimationPlayer").play("idle" + GetDirectionSuffix(direction))
-
-	var tile = get_node(tiles[(player.transform.origin.x-64)/128][(player.transform.origin.y-64)/128])
-	tile.guest = player
+	tweensInProcess.erase(tween)
 	
+	unit.get_node("AnimationPlayer").play("idle" + GetDirectionSuffix(direction))
+	
+	var tile = get_node(tiles[(unit.transform.origin.x-64)/128][(unit.transform.origin.y-64)/128])
 	var mousePos = tile.GetMousePosition()
+	var mouseTileX = int(mousePos.x/128)
+	var mouseTileY = int(mousePos.y/128)
 	
-	tile = get_node(tiles[mousePos.x/128][mousePos.y/128])
-	tile.HoverTile()
-	
-	player.isMoving = false
+	if mouseTileX >= 0 && mouseTileX < 8 && mouseTileY >= 0 && mouseTileY < 5:
+		tile = get_node(tiles[int(mousePos.x/128)][int(mousePos.y/128)])
+		tile.HoverTile()
  
 
 func GetDirectionSuffix(direction):

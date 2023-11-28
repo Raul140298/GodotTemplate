@@ -52,24 +52,6 @@ func GetMousePosition()-> Vector2:
 	return get_global_mouse_position()
 
 
-func CheckIfMouseIsInside():
-	var mouse_position = get_global_mouse_position()
-	
-	print(transform.origin)
-	print(mouse_position)
-	
-	var xLimitSup = transform.origin.x + 64
-	var xLimitInf = transform.origin.x - 64
-	var yLimitSup = transform.origin.y + 64
-	var yLimitInf = transform.origin.y - 64
-	
-	if mouse_position.x <= xLimitSup && mouse_position.x >= xLimitInf && mouse_position.y <= yLimitSup && mouse_position.y >= yLimitInf:
-		print("XD")
-		HoverTile()
-	else:
-		NoHoverTile()
-
-
 func NoHoverTile():
 	$Sprite2D.modulate = Color(0.8,0.8,0.8,1)
 	isHighLited = false
@@ -79,7 +61,7 @@ func _input_event(viewport, event, shape_idx):
 	if event.is_action_pressed("Click") && isHighLited:
 		NoHoverTile()
 		if isFriendlyTile:
-			gameController.MovePlayer(self.transform.origin.x, self.transform.origin.y)
+			gameController.MovePlayer(self)
 		else :
 			if gameController.stepsAvailable[0] > 0:
 				gameController.StartActionPerTurn(0)

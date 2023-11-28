@@ -276,12 +276,13 @@ _data = {
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hbfks"]
 size = Vector2(100, 100)
 
-[node name="Gameplay" type="Node" node_paths=PackedStringArray("player", "btnAction1", "btnAction2", "btnAction3", "playerHp", "actionsPerTurnText", "movementsPerActionText", "turnText")]
+[node name="Gameplay" type="Node" node_paths=PackedStringArray("player", "btnAction1", "btnAction2", "btnAction3", "btnFinishTurn", "playerHp", "actionsPerTurnText", "movementsPerActionText", "turnText")]
 script = ExtResource("5")
 player = NodePath("Player")
 btnAction1 = NodePath("UIButtons/MarginContainer/HBoxContainer/Action1")
 btnAction2 = NodePath("UIButtons/MarginContainer/HBoxContainer/Action2")
 btnAction3 = NodePath("UIButtons/MarginContainer/HBoxContainer/Action3")
+btnFinishTurn = NodePath("UIButtons/MarginContainer/HBoxContainer/FinishTurn")
 playerHp = NodePath("UIButtons/Hp")
 actionsPerTurnText = NodePath("UIButtons/ActionsPerTurn")
 movementsPerActionText = NodePath("UIButtons/MovementsPerAction")
@@ -414,10 +415,11 @@ text = "Turno"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Player" type="CharacterBody2D" parent="."]
+[node name="Player" type="CharacterBody2D" parent="." node_paths=PackedStringArray("gameController")]
 z_index = 10
 position = Vector2(192, 320)
 script = ExtResource("4_vkwhx")
+gameController = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Player"]
 texture = ExtResource("4_yab2s")

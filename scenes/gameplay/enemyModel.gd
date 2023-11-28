@@ -1,15 +1,25 @@
 extends CharacterBody2D
 
-var health: int
-var passive: String
-var actions: Array
 @export var healthText: Control
 
-func SetIntialValues(h, p, a):
+var id: int
+var health: int
+var passive: String
+var actionsPerTurn = 0
+
+func SetIntialValues(h, p, i):
 	health = h
 	passive = p
-	actions = a
+	id = i
 	healthText.text = str(health)
+
+
+func SetActionsPerTurn():
+	if passive == "FlyFast":
+		actionsPerTurn = 2
+	else:
+		actionsPerTurn = 1
+
 
 func TakeDamage(damage):
 	health -= damage
