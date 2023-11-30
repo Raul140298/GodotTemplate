@@ -237,19 +237,21 @@ func ChooseEnemyAction(enemy):
 			
 	elif enemy.id == 2:
 		
-		if enemyTile.damageOnTheTileHistory.is_empty():
-			r = randi() % 100
-			if r < 70:
-				EnemyShootPlayer(enemy)
+		if enemy.health > 35:
+			if enemyTile.damageOnTheTileHistory.is_empty():
+				r = randi() % 100
+				if r < 70:
+					EnemyShootPlayer(enemy)
+				else:
+					MoveEnemy(enemy)
 			else:
-				MoveEnemy(enemy)
+				r = randi() % 100
+				if r < 60:
+					MoveEnemy(enemy)
+				else:
+					EnemyShootPlayer(enemy)
 		else:
-			r = randi() % 100
-			if r < 60:
-				MoveEnemy(enemy)
-			else:
-				EnemyShootPlayer(enemy)
-			
+			EnemyChargePlayer(enemy)
 
 
 func EnemyShootPlayer(enemy):
@@ -260,6 +262,10 @@ func EnemyShootPlayer(enemy):
 	
 	if tileToShoot.guest == player:
 		tileToShoot.DamageTile(10, turn, 2, "Fast")
+
+
+func EnemyChargePlayer(enemy):
+	print("Charge To Player")
 
 
 func MoveEnemy(enemy):

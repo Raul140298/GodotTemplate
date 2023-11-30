@@ -6,7 +6,7 @@ var health = 100
 var guard = 0
 var isMoving = false
 
-func TakeDamage(damage):
+func TakeDamage(damage, type):
 	if guard > 0:
 		health -= damage * guard / 100;
 	else:
