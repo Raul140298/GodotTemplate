@@ -5,6 +5,7 @@ extends Node
 @export var btnAction2: Control
 @export var btnAction3: Control
 @export var btnFinishTurn: Control
+@export var btnRestart: Control
 @export var playerHp: Control 
 @export var actionsPerTurnText: Control
 @export var movementsPerActionText: Control
@@ -28,6 +29,8 @@ var possibleNewTurn = 0
 
 var enemies = []
 var tweensInProcess = []
+
+var gameEnded = false
 
 
 func _ready():
@@ -70,6 +73,7 @@ func SetEnemies():
 		enemy_instance.SetIntialValues(initialValues.health, initialValues.passive, initialValues.id)
 		SetEnemyPosition(enemy_instance)
 		enemy_instance.get_node("AnimationPlayer").play("idle_left")
+		enemy_instance.gameController = self
 		
 		enemies.append(enemy_instance)
 
@@ -91,10 +95,11 @@ func SetEnemyPosition(enemy):
 
 
 func FinishTurn():
-	if turn == possibleNewTurn:
-		StartPlayerTurn()
-	else:
-		StartEnemiesTurn()
+	if gameEnded == false:
+		if turn == possibleNewTurn:
+			StartPlayerTurn()
+		else:
+			StartEnemiesTurn()
 
 
 func SelectAction(id):
@@ -194,12 +199,57 @@ func StartEnemiesTurn():
 
 
 func ChooseEnemyAction(enemy):
-	var r = randi() % 2
+	var x = (enemy.transform.origin.x-64)/128
+	var y = (enemy.transform.origin.y-64)/128
 	
-	if r == 0:
-		MoveEnemy(enemy)
-	else:
-		EnemyShootPlayer(enemy)
+	var enemyTile = get_node(tiles[x][y])
+	var r
+	
+	if enemy.id == 0:
+		
+		if enemyTile.damageOnTheTileHistory.is_empty():
+			r = randi() % 100
+			if r < 70:
+				EnemyShootPlayer(enemy)
+			else:
+				MoveEnemy(enemy)
+		else:
+			r = randi() % 100
+			if r < 60:
+				MoveEnemy(enemy)
+			else:
+				EnemyShootPlayer(enemy)
+			
+	elif enemy.id == 1:
+		
+		if enemyTile.damageOnTheTileHistory.is_empty():
+			r = randi() % 100
+			if r < 70:
+				EnemyShootPlayer(enemy)
+			else:
+				MoveEnemy(enemy)
+		else:
+			r = randi() % 100
+			if r < 60:
+				MoveEnemy(enemy)
+			else:
+				EnemyShootPlayer(enemy)
+			
+	elif enemy.id == 2:
+		
+		if enemyTile.damageOnTheTileHistory.is_empty():
+			r = randi() % 100
+			if r < 70:
+				EnemyShootPlayer(enemy)
+			else:
+				MoveEnemy(enemy)
+		else:
+			r = randi() % 100
+			if r < 60:
+				MoveEnemy(enemy)
+			else:
+				EnemyShootPlayer(enemy)
+			
 
 
 func EnemyShootPlayer(enemy):
@@ -209,7 +259,7 @@ func EnemyShootPlayer(enemy):
 	var tileToShoot = get_node(tiles[x][y])
 	
 	if tileToShoot.guest == player:
-		tileToShoot.DamageTile(10, turn, 2)
+		tileToShoot.DamageTile(10, turn, 2, "Fast")
 
 
 func MoveEnemy(enemy):
@@ -341,6 +391,15 @@ func GetDirectionSuffix(direction):
 	return "_left"
 
 
+func FinishGame():
+	gameEnded = true
+	btnAction1.hide()
+	btnAction2.hide()
+	btnAction3.hide()
+	btnFinishTurn.hide()
+	btnRestart.show()
+
+
 func _on_action_1_pressed():
 	SelectAction(0)
 
@@ -355,3 +414,6 @@ func _on_action_3_pressed():
 
 func _on_finish_turn_pressed():
 	FinishTurn()
+	
+func _on_restart_pressed():
+	get_tree().reload_current_scene()

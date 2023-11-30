@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://4fyoq8npekf0"]
+[gd_scene load_steps=20 format=3 uid="uid://4fyoq8npekf0"]
 
 [ext_resource type="PackedScene" uid="uid://barl4q1kugrmm" path="res://scenes/gameplay/pause-layer/pause-layer.tscn" id="2"]
 [ext_resource type="Script" path="res://scenes/gameplay/PlayerModel.gd" id="4_vkwhx"]
@@ -276,13 +276,20 @@ _data = {
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hbfks"]
 size = Vector2(100, 100)
 
-[node name="Gameplay" type="Node" node_paths=PackedStringArray("player", "btnAction1", "btnAction2", "btnAction3", "btnFinishTurn", "playerHp", "actionsPerTurnText", "movementsPerActionText", "turnText")]
+[sub_resource type="LabelSettings" id="LabelSettings_8oxxq"]
+font_size = 32
+font_color = Color(0.886275, 0.447059, 0.490196, 1)
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
+
+[node name="Gameplay" type="Node" node_paths=PackedStringArray("player", "btnAction1", "btnAction2", "btnAction3", "btnFinishTurn", "btnRestart", "playerHp", "actionsPerTurnText", "movementsPerActionText", "turnText")]
 script = ExtResource("5")
 player = NodePath("Player")
 btnAction1 = NodePath("UIButtons/MarginContainer/HBoxContainer/Action1")
 btnAction2 = NodePath("UIButtons/MarginContainer/HBoxContainer/Action2")
 btnAction3 = NodePath("UIButtons/MarginContainer/HBoxContainer/Action3")
 btnFinishTurn = NodePath("UIButtons/MarginContainer/HBoxContainer/FinishTurn")
+btnRestart = NodePath("UIButtons/MarginContainer/HBoxContainer/Restart")
 playerHp = NodePath("UIButtons/Hp")
 actionsPerTurnText = NodePath("UIButtons/ActionsPerTurn")
 movementsPerActionText = NodePath("UIButtons/MovementsPerAction")
@@ -332,6 +339,11 @@ text = "Action 3"
 [node name="FinishTurn" type="Button" parent="UIButtons/MarginContainer/HBoxContainer"]
 layout_mode = 2
 text = "Finish Turn"
+
+[node name="Restart" type="Button" parent="UIButtons/MarginContainer/HBoxContainer"]
+visible = false
+layout_mode = 2
+text = "Restart"
 
 [node name="HPLabel" type="Label" parent="UIButtons"]
 layout_mode = 0
@@ -450,6 +462,15 @@ frame = 86
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile1"]
 shape = SubResource("RectangleShape2D_hbfks")
 
+[node name="Label" type="Label" parent="Tile1"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
+
 [node name="Tile2" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(192, 64)
 script = ExtResource("5_5bixp")
@@ -464,6 +485,15 @@ frame = 86
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile2"]
 shape = SubResource("RectangleShape2D_hbfks")
+
+[node name="Label" type="Label" parent="Tile2"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
 
 [node name="Tile3" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(320, 64)
@@ -480,6 +510,15 @@ frame = 86
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile3"]
 shape = SubResource("RectangleShape2D_hbfks")
 
+[node name="Label" type="Label" parent="Tile3"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
+
 [node name="Tile4" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(448, 64)
 script = ExtResource("5_5bixp")
@@ -494,6 +533,15 @@ frame = 86
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile4"]
 shape = SubResource("RectangleShape2D_hbfks")
+
+[node name="Label" type="Label" parent="Tile4"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
 
 [node name="Tile5" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(576, 64)
@@ -510,6 +558,15 @@ frame = 87
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile5"]
 shape = SubResource("RectangleShape2D_hbfks")
 
+[node name="Label" type="Label" parent="Tile5"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
+
 [node name="Tile6" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(704, 64)
 script = ExtResource("5_5bixp")
@@ -524,6 +581,15 @@ frame = 87
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile6"]
 shape = SubResource("RectangleShape2D_hbfks")
+
+[node name="Label" type="Label" parent="Tile6"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
 
 [node name="Tile7" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(832, 64)
@@ -540,6 +606,15 @@ frame = 87
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile7"]
 shape = SubResource("RectangleShape2D_hbfks")
 
+[node name="Label" type="Label" parent="Tile7"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
+
 [node name="Tile8" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(960, 64)
 script = ExtResource("5_5bixp")
@@ -554,6 +629,15 @@ frame = 87
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile8"]
 shape = SubResource("RectangleShape2D_hbfks")
+
+[node name="Label" type="Label" parent="Tile8"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
 
 [node name="Tile9" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(64, 192)
@@ -570,6 +654,15 @@ frame = 86
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile9"]
 shape = SubResource("RectangleShape2D_hbfks")
 
+[node name="Label" type="Label" parent="Tile9"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
+
 [node name="Tile10" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(192, 192)
 script = ExtResource("5_5bixp")
@@ -584,6 +677,15 @@ frame = 86
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile10"]
 shape = SubResource("RectangleShape2D_hbfks")
+
+[node name="Label" type="Label" parent="Tile10"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
 
 [node name="Tile11" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(320, 192)
@@ -600,6 +702,15 @@ frame = 86
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile11"]
 shape = SubResource("RectangleShape2D_hbfks")
 
+[node name="Label" type="Label" parent="Tile11"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
+
 [node name="Tile12" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(448, 192)
 script = ExtResource("5_5bixp")
@@ -614,6 +725,15 @@ frame = 86
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile12"]
 shape = SubResource("RectangleShape2D_hbfks")
+
+[node name="Label" type="Label" parent="Tile12"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
 
 [node name="Tile13" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(576, 192)
@@ -630,6 +750,15 @@ frame = 87
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile13"]
 shape = SubResource("RectangleShape2D_hbfks")
 
+[node name="Label" type="Label" parent="Tile13"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
+
 [node name="Tile14" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(704, 192)
 script = ExtResource("5_5bixp")
@@ -644,6 +773,15 @@ frame = 87
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile14"]
 shape = SubResource("RectangleShape2D_hbfks")
+
+[node name="Label" type="Label" parent="Tile14"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
 
 [node name="Tile15" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(832, 192)
@@ -660,6 +798,15 @@ frame = 87
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile15"]
 shape = SubResource("RectangleShape2D_hbfks")
 
+[node name="Label" type="Label" parent="Tile15"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
+
 [node name="Tile16" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(960, 192)
 script = ExtResource("5_5bixp")
@@ -674,6 +821,15 @@ frame = 87
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile16"]
 shape = SubResource("RectangleShape2D_hbfks")
+
+[node name="Label" type="Label" parent="Tile16"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
 
 [node name="Tile17" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(64, 320)
@@ -690,6 +846,15 @@ frame = 86
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile17"]
 shape = SubResource("RectangleShape2D_hbfks")
 
+[node name="Label" type="Label" parent="Tile17"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
+
 [node name="Tile18" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(192, 320)
 script = ExtResource("5_5bixp")
@@ -704,6 +869,15 @@ frame = 86
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile18"]
 shape = SubResource("RectangleShape2D_hbfks")
+
+[node name="Label" type="Label" parent="Tile18"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
 
 [node name="Tile19" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(320, 320)
@@ -720,6 +894,15 @@ frame = 86
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile19"]
 shape = SubResource("RectangleShape2D_hbfks")
 
+[node name="Label" type="Label" parent="Tile19"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
+
 [node name="Tile20" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(448, 320)
 script = ExtResource("5_5bixp")
@@ -734,6 +917,15 @@ frame = 86
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile20"]
 shape = SubResource("RectangleShape2D_hbfks")
+
+[node name="Label" type="Label" parent="Tile20"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
 
 [node name="Tile21" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(576, 320)
@@ -750,6 +942,15 @@ frame = 87
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile21"]
 shape = SubResource("RectangleShape2D_hbfks")
 
+[node name="Label" type="Label" parent="Tile21"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
+
 [node name="Tile22" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(704, 320)
 script = ExtResource("5_5bixp")
@@ -764,6 +965,15 @@ frame = 87
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile22"]
 shape = SubResource("RectangleShape2D_hbfks")
+
+[node name="Label" type="Label" parent="Tile22"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
 
 [node name="Tile23" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(832, 320)
@@ -780,6 +990,15 @@ frame = 87
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile23"]
 shape = SubResource("RectangleShape2D_hbfks")
 
+[node name="Label" type="Label" parent="Tile23"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
+
 [node name="Tile24" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(960, 320)
 script = ExtResource("5_5bixp")
@@ -794,6 +1013,15 @@ frame = 87
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile24"]
 shape = SubResource("RectangleShape2D_hbfks")
+
+[node name="Label" type="Label" parent="Tile24"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
 
 [node name="Tile25" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(64, 448)
@@ -810,6 +1038,15 @@ frame = 86
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile25"]
 shape = SubResource("RectangleShape2D_hbfks")
 
+[node name="Label" type="Label" parent="Tile25"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
+
 [node name="Tile26" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(192, 448)
 script = ExtResource("5_5bixp")
@@ -824,6 +1061,15 @@ frame = 86
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile26"]
 shape = SubResource("RectangleShape2D_hbfks")
+
+[node name="Label" type="Label" parent="Tile26"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
 
 [node name="Tile27" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(320, 448)
@@ -840,6 +1086,15 @@ frame = 86
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile27"]
 shape = SubResource("RectangleShape2D_hbfks")
 
+[node name="Label" type="Label" parent="Tile27"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
+
 [node name="Tile28" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(448, 448)
 script = ExtResource("5_5bixp")
@@ -854,6 +1109,15 @@ frame = 86
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile28"]
 shape = SubResource("RectangleShape2D_hbfks")
+
+[node name="Label" type="Label" parent="Tile28"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
 
 [node name="Tile29" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(576, 448)
@@ -870,6 +1134,15 @@ frame = 87
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile29"]
 shape = SubResource("RectangleShape2D_hbfks")
 
+[node name="Label" type="Label" parent="Tile29"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
+
 [node name="Tile30" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(704, 448)
 script = ExtResource("5_5bixp")
@@ -884,6 +1157,15 @@ frame = 87
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile30"]
 shape = SubResource("RectangleShape2D_hbfks")
+
+[node name="Label" type="Label" parent="Tile30"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
 
 [node name="Tile31" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(832, 448)
@@ -900,6 +1182,15 @@ frame = 87
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile31"]
 shape = SubResource("RectangleShape2D_hbfks")
 
+[node name="Label" type="Label" parent="Tile31"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
+
 [node name="Tile32" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(960, 448)
 script = ExtResource("5_5bixp")
@@ -914,6 +1205,15 @@ frame = 87
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile32"]
 shape = SubResource("RectangleShape2D_hbfks")
+
+[node name="Label" type="Label" parent="Tile32"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
 
 [node name="Tile33" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(64, 576)
@@ -930,6 +1230,15 @@ frame = 86
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile33"]
 shape = SubResource("RectangleShape2D_hbfks")
 
+[node name="Label" type="Label" parent="Tile33"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
+
 [node name="Tile34" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(192, 576)
 script = ExtResource("5_5bixp")
@@ -944,6 +1253,15 @@ frame = 86
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile34"]
 shape = SubResource("RectangleShape2D_hbfks")
+
+[node name="Label" type="Label" parent="Tile34"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
 
 [node name="Tile35" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(320, 576)
@@ -960,6 +1278,15 @@ frame = 86
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile35"]
 shape = SubResource("RectangleShape2D_hbfks")
 
+[node name="Label" type="Label" parent="Tile35"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
+
 [node name="Tile36" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(448, 576)
 script = ExtResource("5_5bixp")
@@ -974,6 +1301,15 @@ frame = 86
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile36"]
 shape = SubResource("RectangleShape2D_hbfks")
+
+[node name="Label" type="Label" parent="Tile36"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
 
 [node name="Tile37" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(576, 576)
@@ -990,6 +1326,15 @@ frame = 87
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile37"]
 shape = SubResource("RectangleShape2D_hbfks")
 
+[node name="Label" type="Label" parent="Tile37"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
+
 [node name="Tile38" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(704, 576)
 script = ExtResource("5_5bixp")
@@ -1004,6 +1349,15 @@ frame = 87
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile38"]
 shape = SubResource("RectangleShape2D_hbfks")
+
+[node name="Label" type="Label" parent="Tile38"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
 
 [node name="Tile39" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(832, 576)
@@ -1020,6 +1374,15 @@ frame = 87
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile39"]
 shape = SubResource("RectangleShape2D_hbfks")
 
+[node name="Label" type="Label" parent="Tile39"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
+
 [node name="Tile40" type="Area2D" parent="." node_paths=PackedStringArray("player", "gameController")]
 position = Vector2(960, 576)
 script = ExtResource("5_5bixp")
@@ -1035,7 +1398,17 @@ frame = 87
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Tile40"]
 shape = SubResource("RectangleShape2D_hbfks")
 
+[node name="Label" type="Label" parent="Tile40"]
+z_index = 20
+offset_left = -56.0
+offset_top = -67.0
+offset_right = 63.0
+offset_bottom = -14.0
+text = "0"
+label_settings = SubResource("LabelSettings_8oxxq")
+
 [connection signal="pressed" from="UIButtons/MarginContainer/HBoxContainer/Action1" to="." method="_on_action_1_pressed"]
 [connection signal="pressed" from="UIButtons/MarginContainer/HBoxContainer/Action2" to="." method="_on_action_2_pressed"]
 [connection signal="pressed" from="UIButtons/MarginContainer/HBoxContainer/Action3" to="." method="_on_action_3_pressed"]
 [connection signal="pressed" from="UIButtons/MarginContainer/HBoxContainer/FinishTurn" to="." method="_on_finish_turn_pressed"]
+[connection signal="pressed" from="UIButtons/MarginContainer/HBoxContainer/Restart" to="." method="_on_restart_pressed"]

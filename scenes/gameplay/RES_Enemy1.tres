@@ -4,6 +4,6 @@
 
 [resource]
 script = ExtResource("1_40n2u")
+id = 0
 passive = ""
 health = 50.0
-actions = ["Movement", "ShootFast"]

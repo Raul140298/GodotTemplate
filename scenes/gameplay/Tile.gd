@@ -13,20 +13,21 @@ func _ready():
 	NoHoverTile()
 	mouse_entered.connect(HoverTile)
 	mouse_exited.connect(NoHoverTile)
+	$Label.text = ""
 	
 
-func DamageTile(damage, initialTurn, turnsToDamage):
+func DamageTile(damage, initialTurn, turnsToDamage, type):
 	if damageOnTheTileHistory.is_empty():
 		gameController.turnChanged.connect(OnDamageTileSignal)
 		
-	damageOnTheTileHistory.append(DamageOnTheTile.new(damage, initialTurn + turnsToDamage))
-
+	damageOnTheTileHistory.append(DamageOnTheTile.new(damage, initialTurn + turnsToDamage, type))
+	SetTileDamageText()
 
 func OnDamageTileSignal():
 	for dmgTile in damageOnTheTileHistory:
 		if gameController.turn == dmgTile.turnToTrigger:
 			if guest != null:
-				guest.TakeDamage(dmgTile.damage)
+				guest.TakeDamage(dmgTile.damage, dmgTile.type)
 			dmgTile.shouldBeErased = true
 	
 	for dmgTile in damageOnTheTileHistory:
@@ -35,6 +36,8 @@ func OnDamageTileSignal():
 		
 	if damageOnTheTileHistory.is_empty():
 		gameController.turnChanged.disconnect(OnDamageTileSignal)
+		
+	SetTileDamageText()
 
 
 func HoverTile():
@@ -65,10 +68,22 @@ func _input_event(viewport, event, shape_idx):
 		else :
 			if gameController.stepsAvailable[0] > 0:
 				gameController.StartActionPerTurn(0)
-				DamageTile(10, gameController.turn, 2)
+				DamageTile(10, gameController.turn, 2, "Fast")
 			elif gameController.stepsAvailable[1] > 0:
 				gameController.StartActionPerTurn(1)
-				DamageTile(30, gameController.turn, 2)
+				DamageTile(30, gameController.turn, 2, "Slow")
+
+
+func SetTileDamageText():
+	var damage = 0
+	
+	for d in damageOnTheTileHistory:
+		damage += d.damage
+	
+	if damage <= 0:
+		$Label.text = ""
+	else:
+		$Label.text = str(damage)
 
 
 func distanceBetweenPlayer() -> float:

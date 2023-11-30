@@ -1,5 +1,6 @@
 extends CharacterBody2D
 
+var gameController: Node
 @export var healthText: Control
 
 var id: int
@@ -21,9 +22,24 @@ func SetActionsPerTurn():
 		actionsPerTurn = 1
 
 
-func TakeDamage(damage):
+func TakeDamage(damage, type):
+	if id == 1 && passive == "FlyFast":
+		if type == "Slow":
+			return
+		elif type == "Fast":
+			passive == ""
+			
+	if id == 2 && passive == "Shield":
+		if type == "Fast":
+			return
+		elif type == "Slow":
+			passive == ""
+		
 	health -= damage
 	if health <= 0:
 		health = 0
+		gameController.enemies.erase(self)
+		if gameController.enemies.is_empty():
+			gameController.FinishGame()
 		queue_free()
 	healthText.text = str(health)
