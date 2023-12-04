@@ -189,16 +189,30 @@ func StartEnemiesTurn():
 	
 	enemies.shuffle()
 	
+	var enemiesActions = 0
+	
 	for enemy in enemies:
-		ChooseEnemyAction(enemy)
+		enemy.SetActionsPerTurn()
+		enemiesActions += enemy.actionsPerTurn
+	
+	while enemiesActions > 0:
+		for enemy in enemies:
+			if enemy.actionsPerTurn > 0:
+				enemy.actionsPerTurn -= 1
+				enemiesActions -= 1
+				ChooseEnemyAction(enemy)
 		
-	for tween in tweensInProcess:
-		await tween.finished
+		for tween in tweensInProcess:
+			await tween.finished
 		
 	FinishTurn()
 
 
 func ChooseEnemyAction(enemy):
+	if enemy.turnsToWait > 0:
+		enemy.turnsToWait -= 1
+		return
+	
 	var x = (enemy.transform.origin.x-64)/128
 	var y = (enemy.transform.origin.y-64)/128
 	
@@ -234,7 +248,7 @@ func ChooseEnemyAction(enemy):
 				MoveEnemy(enemy)
 			else:
 				EnemyShootPlayer(enemy)
-			
+				
 	elif enemy.id == 2:
 		
 		if enemy.health > 35:
@@ -255,8 +269,11 @@ func ChooseEnemyAction(enemy):
 
 
 func EnemyShootPlayer(enemy):
-	var x = (player.transform.origin.x-64)/128
-	var y = (player.transform.origin.y-64)/128
+	if player == null: 
+		return
+	
+	var x = int((player.transform.origin.x - 64) / 128)
+	var y = int((player.transform.origin.y - 64) / 128)
 	
 	var tileToShoot = get_node(tiles[x][y])
 	
@@ -265,7 +282,26 @@ func EnemyShootPlayer(enemy):
 
 
 func EnemyChargePlayer(enemy):
-	print("Charge To Player")
+	if player == null:
+		return
+		
+	enemy.turnsToWait = 3
+	
+	var x = int((player.transform.origin.x - 64) / 128)
+	var y = int((player.transform.origin.y - 64) / 128)
+
+	for dx in range(-1, 2):
+		for dy in range(-1, 2):
+			var currentX = x + dx
+			var currentY = y + dy
+
+			# Verificar si la posición actual está dentro de los límites de la matriz tiles
+			if currentX >= 0 and currentX < 4 and currentY >= 0 and currentY < 5:
+				var tileToShoot = get_node(tiles[currentX][currentY])
+
+				# Verificar si el nodo en la posición actual tiene un 'guest' y realizar la acción
+				if tileToShoot != null:
+					tileToShoot.DamageTile(10, turn, 2, "Fast")
 
 
 func MoveEnemy(enemy):

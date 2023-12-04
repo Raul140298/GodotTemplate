@@ -30,9 +30,13 @@ func OnDamageTileSignal():
 				guest.TakeDamage(dmgTile.damage, dmgTile.type)
 			dmgTile.shouldBeErased = true
 	
-	for dmgTile in damageOnTheTileHistory:
+	var i = 0
+	while i < damageOnTheTileHistory.size():
+		var dmgTile = damageOnTheTileHistory[i]
 		if dmgTile.shouldBeErased == true:
 			damageOnTheTileHistory.erase(dmgTile)
+		else:
+			i += 1
 		
 	if damageOnTheTileHistory.is_empty():
 		gameController.turnChanged.disconnect(OnDamageTileSignal)

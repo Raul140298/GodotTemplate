@@ -7,6 +7,7 @@ var id: int
 var health: int
 var passive: String
 var actionsPerTurn = 0
+var turnsToWait = 0
 
 func SetIntialValues(h, p, i):
 	health = h
@@ -23,17 +24,19 @@ func SetActionsPerTurn():
 
 
 func TakeDamage(damage, type):
+	print(type)
+	
 	if id == 1 && passive == "FlyFast":
 		if type == "Slow":
 			return
 		elif type == "Fast":
-			passive == ""
+			passive = ""
 			
 	if id == 2 && passive == "Shield":
 		if type == "Fast":
 			return
 		elif type == "Slow":
-			passive == ""
+			passive = ""
 		
 	health -= damage
 	if health <= 0:
