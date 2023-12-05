@@ -1,7 +1,8 @@
-[gd_scene load_steps=14 format=3 uid="uid://bwnhkcbxhyaew"]
+[gd_scene load_steps=15 format=3 uid="uid://bwnhkcbxhyaew"]
 
 [ext_resource type="Script" path="res://scenes/gameplay/enemyModel.gd" id="1_k3r8f"]
 [ext_resource type="Texture2D" uid="uid://c4lp76ubmqyod" path="res://assets/sprites/sokoban_tilesheet.png" id="1_tvymm"]
+[ext_resource type="PackedScene" uid="uid://bckhb8yucnlqq" path="res://scenes/gameplay/popup.tscn" id="2_ithen"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fnt0r"]
 size = Vector2(128, 128)
@@ -270,6 +271,7 @@ _data = {
 z_index = 10
 script = ExtResource("1_k3r8f")
 healthText = NodePath("Label")
+popup = ExtResource("2_ithen")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_tvymm")

@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
 @export var gameController: Node
+@export var popup: PackedScene
 
 var health = 100
 var guard = 0
@@ -19,3 +20,11 @@ func TakeDamage(damage, type):
 		gameController.playerHp.text = str(health)
 		gameController.FinishGame()
 		queue_free()
+
+
+func Popup(value, offset):
+	var popupInstance = popup.instantiate()
+	popupInstance.get_node("Label").text = value
+	popupInstance.position = global_position - Vector2(0, offset)
+	
+	get_tree().current_scene.add_child(popupInstance)

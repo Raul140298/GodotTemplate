@@ -1,6 +1,7 @@
-[gd_scene load_steps=20 format=3 uid="uid://4fyoq8npekf0"]
+[gd_scene load_steps=21 format=3 uid="uid://4fyoq8npekf0"]
 
 [ext_resource type="PackedScene" uid="uid://barl4q1kugrmm" path="res://scenes/gameplay/pause-layer/pause-layer.tscn" id="2"]
+[ext_resource type="PackedScene" uid="uid://bckhb8yucnlqq" path="res://scenes/gameplay/popup.tscn" id="4_pj24d"]
 [ext_resource type="Script" path="res://scenes/gameplay/PlayerModel.gd" id="4_vkwhx"]
 [ext_resource type="Texture2D" uid="uid://c4lp76ubmqyod" path="res://assets/sprites/sokoban_tilesheet.png" id="4_yab2s"]
 [ext_resource type="Script" path="res://scenes/gameplay/gameplay.gd" id="5"]
@@ -432,6 +433,7 @@ z_index = 10
 position = Vector2(192, 320)
 script = ExtResource("4_vkwhx")
 gameController = NodePath("..")
+popup = ExtResource("4_pj24d")
 
 [node name="Sprite2D" type="Sprite2D" parent="Player"]
 texture = ExtResource("4_yab2s")

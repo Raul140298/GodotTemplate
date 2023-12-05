@@ -24,11 +24,21 @@ func DamageTile(damage, initialTurn, turnsToDamage, type):
 	SetTileDamageText()
 
 func OnDamageTileSignal():
+	var damage = 0
+	
+	if guest != null:
+		damage = guest.health
+	
 	for dmgTile in damageOnTheTileHistory:
 		if gameController.turn == dmgTile.turnToTrigger:
 			if guest != null:
 				guest.TakeDamage(dmgTile.damage, dmgTile.type)
 			dmgTile.shouldBeErased = true
+	
+	if guest != null:	
+		damage -= guest.health
+		if damage > 0:
+			guest.Popup(str(damage), 36)
 	
 	var i = 0
 	while i < damageOnTheTileHistory.size():
