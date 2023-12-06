@@ -63,7 +63,7 @@ func SetEnemies():
 		if i == 0:
 			initialValues = preload("res://scenes/gameplay/RES_Enemy1.tres")
 		elif i == 1:
-			initialValues = preload("res://scenes/gameplay/RES_Enemy2.tres")
+			initialValues = preload("res://scenes/gameplay/RES_Enemy1.tres")
 		elif i == 2:
 			initialValues = preload("res://scenes/gameplay/RES_Enemy3.tres")
 		
