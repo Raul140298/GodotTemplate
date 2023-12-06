@@ -3,7 +3,7 @@ extends CharacterBody2D
 @export var gameController: Node
 @export var popup: PackedScene
 
-var health = 100
+var health = 50
 var guard = 0
 var isMoving = false
 

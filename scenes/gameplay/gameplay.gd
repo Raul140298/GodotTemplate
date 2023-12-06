@@ -133,9 +133,9 @@ func OnActionFinished():
 func InstantAction(id):
 	if id == 3 && stepsAvailable[3] > 0:
 		StartActionPerTurn(3)
-		player.health += 25
-		if player.health > 100:
-			player.health = 100
+		player.health += 10
+		if player.health > 50:
+			player.health = 50
 		playerHp.text = str(player.health)
 		
 	if id == 4 && stepsAvailable[4] > 0:
@@ -223,13 +223,13 @@ func ChooseEnemyAction(enemy):
 		
 		if enemyTile.damageOnTheTileHistory.is_empty():
 			r = randi() % 100
-			if r < 70:
+			if r < 80:
 				EnemyShootPlayer(enemy)
 			else:
 				MoveEnemy(enemy)
 		else:
 			r = randi() % 100
-			if r < 60:
+			if r < 50:
 				MoveEnemy(enemy)
 			else:
 				EnemyShootPlayer(enemy)
@@ -238,13 +238,13 @@ func ChooseEnemyAction(enemy):
 		
 		if enemyTile.damageOnTheTileHistory.is_empty():
 			r = randi() % 100
-			if r < 70:
+			if r < 80:
 				EnemyShootPlayer(enemy)
 			else:
 				MoveEnemy(enemy)
 		else:
 			r = randi() % 100
-			if r < 60:
+			if r < 50:
 				MoveEnemy(enemy)
 			else:
 				EnemyShootPlayer(enemy)
@@ -254,13 +254,13 @@ func ChooseEnemyAction(enemy):
 		if enemy.health > 35:
 			if enemyTile.damageOnTheTileHistory.is_empty():
 				r = randi() % 100
-				if r < 70:
+				if r < 80:
 					EnemyShootPlayer(enemy)
 				else:
 					MoveEnemy(enemy)
 			else:
 				r = randi() % 100
-				if r < 60:
+				if r < 50:
 					MoveEnemy(enemy)
 				else:
 					EnemyShootPlayer(enemy)
@@ -301,7 +301,7 @@ func EnemyChargePlayer(enemy):
 
 				# Verificar si el nodo en la posición actual tiene un 'guest' y realizar la acción
 				if tileToShoot != null:
-					tileToShoot.DamageTile(10, turn, 2, "Fast")
+					tileToShoot.DamageTile(30, turn, 2, "Fast")
 
 
 func MoveEnemy(enemy):

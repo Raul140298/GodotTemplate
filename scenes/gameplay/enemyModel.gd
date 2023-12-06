@@ -15,7 +15,13 @@ func SetIntialValues(h, p, i):
 	passive = p
 	id = i
 	healthText.text = str(health)
-
+	
+	if id == 0:
+		$Sprite2D.modulate = Color(1.00, 0.83, 0.15)
+	elif id == 1:
+		$Sprite2D.modulate = Color(0.96, 0.15, 0.54)
+	elif id == 2:
+		$Sprite2D.modulate = Color(0.05, 0.67, 0.74)
 
 func SetActionsPerTurn():
 	if passive == "FlyFast":
